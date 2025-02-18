@@ -11,3 +11,20 @@ var (
 	dbTimeZone = "UTC"
 )
 
+func OpenConnection() (*gorm.DB, error) {
+	connectionInfo := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable TimeZone=%s",
+		dbHost,
+		dbPort,
+		dbUser,
+		dbPassword,
+		dbName,
+		dbTimeZone)
+
+	db, err := gorm.Open(postgres.Open(connectionInfo), &gorm.Config{})
+	if err != nil {
+		return nil, err
+	}
+
+	log.Println("Sucesfuly connected to the database!")
+	return db, nil
+}
