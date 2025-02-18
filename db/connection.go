@@ -1,6 +1,12 @@
 package coonection
 
+import (
+	"fmt"
+	"log"
 
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
+)
 
 var (
 	dbHost     = "localhost"
