@@ -1,3 +1,7 @@
+package coonection
+
+
+
 var (
 	dbHost     = "localhost"
 	dbPort     = "5432"
@@ -6,3 +10,4 @@ var (
 	dbName     = "resizer"
 	dbTimeZone = "UTC"
 )
+
