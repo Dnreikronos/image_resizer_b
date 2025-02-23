@@ -1,4 +1,4 @@
-package coonection
+package connection
 
 import (
 	"fmt"
