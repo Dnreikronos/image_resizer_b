@@ -34,11 +34,11 @@ services:
 
   resizer:
     container_name: resizer_application
-    ports: 
+    ports:
       - 9090:9090
-    build: 
+    build:
       context: .
-    volumes: 
+    volumes:
       - .:/app
     environment:
       DB_HOST: ${DB_HOST}
