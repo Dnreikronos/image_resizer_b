@@ -22,7 +22,7 @@ services:
       - "5000:5000"
       - "9600:9600"
 
-  kinana:
+  kibana:
     image: docker.elastic.co/kibana/kibana:8.5.1
     container_name: kibana
     environment:
@@ -65,7 +65,7 @@ services:
     image: postgres:latest
     container_name: postgres
     ports:
-      - '5432:5432'
+      - "5432:5432"
     volumes:
       - postgresDB:/var/lib/postgresql/data
     env_file:
