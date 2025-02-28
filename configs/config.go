@@ -1,8 +1,9 @@
 package configs
 
-import "github.com/spf13/viper"
 import (
 	"log"
+	"os"
+	"strings"
 
 	"github.com/joho/godotenv"
 	"github.com/spf13/viper"
@@ -37,6 +38,7 @@ func init() {
 	viper.SetDefault("database.database", "${POSTGRES_DB}")
 	viper.SetDefault("database.timezone", "${POSTGRES_TIME_ZONE}")
 }
+
 func Load() error {
 	if err := godotenv.Load(); err != nil {
 		log.Println("No .env file found, relying on environment variables")
@@ -89,4 +91,11 @@ func GetDB() DBConfig {
 		log.Fatal("Configuration is not initialized")
 	}
 	return cfg.DB
+}
+
+func GetServerPort() string {
+	if cfg == nil {
+		log.Fatal("Configuration is not initialized")
+	}
+	return cfg.API.Port
 }
