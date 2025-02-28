@@ -3,6 +3,7 @@ module github.com/Dnreikronos/image_resizer_b
 go 1.24.0
 
 require (
+	github.com/joho/godotenv v1.5.1
 	github.com/spf13/viper v1.19.0
 	gorm.io/driver/postgres v1.5.11
 	gorm.io/gorm v1.25.12
