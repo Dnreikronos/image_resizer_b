@@ -1,6 +1,12 @@
 package configs
 
 import "github.com/spf13/viper"
+import (
+	"log"
+
+	"github.com/joho/godotenv"
+	"github.com/spf13/viper"
+)
 
 var cfg *config
 
