@@ -84,3 +84,9 @@ func replaceEnvVariables() {
 	}
 }
 
+func GetDB() DBConfig {
+	if cfg == nil {
+		log.Fatal("Configuration is not initialized")
+	}
+	return cfg.DB
+}
