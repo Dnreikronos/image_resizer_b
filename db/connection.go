@@ -3,18 +3,19 @@ package connection
 import (
 	"fmt"
 	"log"
+	"os"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
 var (
-	dbHost     = "localhost"
-	dbPort     = "5432"
-	dbUser     = "resizer"
-	dbPassword = "admin123"
-	dbName     = "resizer"
-	dbTimeZone = "UTC"
+	dbHost     = os.Getenv("DB_HOST")
+	dbPort     = os.Getenv("DB_PORT")
+	dbUser     = os.Getenv("DB_USER")
+	dbPassword = os.Getenv("POSTGRES_PASSWORD")
+	dbName     = os.Getenv("DB_NAME")
+	dbTimeZone = os.Getenv("POSTGRES_TIME_ZONE")
 )
 
 func OpenConnection() (*gorm.DB, error) {
