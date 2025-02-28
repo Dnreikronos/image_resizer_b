@@ -21,3 +21,12 @@ type DBConfig struct {
 }
 
 
+func init() {
+	viper.SetDefault("api.port", "9090")
+	viper.SetDefault("database.host", "${DB_HOST}")
+	viper.SetDefault("database.port", "${DB_PORT}")
+	viper.SetDefault("database.user", "${DB_USER}")
+	viper.SetDefault("database.pass", "${POSTGRES_PASSWORD}")
+	viper.SetDefault("database.database", "${POSTGRES_DB}")
+	viper.SetDefault("database.timezone", "${POSTGRES_TIME_ZONE}")
+}
