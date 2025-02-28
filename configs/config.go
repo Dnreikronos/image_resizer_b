@@ -70,3 +70,17 @@ func Load() error {
 	log.Printf("Database config: %+v", cfg.DB)
 	return nil
 }
+
+func replaceEnvVariables() {
+	for _, key := range viper.AllKeys() {
+		value := viper.GetString(key)
+		if strings.HasPrefix(value, "${") && strings.HasSuffix(value, "}") {
+			envKey := value[2 : len(value)-1]
+			envValue := os.Getenv(envKey)
+			if envValue != "" {
+				viper.Set(key, envValue)
+			}
+		}
+	}
+}
+
