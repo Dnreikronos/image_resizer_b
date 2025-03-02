@@ -18,6 +18,10 @@ func OpenConnection() (*gorm.DB, error) {
 	dbName := os.Getenv("DB_NAME")
 	dbTimeZone := os.Getenv("POSTGRES_TIME_ZONE")
 
+	if dbHost == "" || dbPort == "" || dbUser == "" || dbPassword == "" || dbName == "" || dbTimeZone == "" {
+		log.Fatalf("Missing required environment variables for database connection")
+	}
+
 	connectionInfo := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable TimeZone=%s",
 		dbHost,
 		dbPort,
