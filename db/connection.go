@@ -36,6 +36,6 @@ func OpenConnection() (*gorm.DB, error) {
 		return nil, err
 	}
 
-	log.Println("Sucesfuly connected to the database!")
-	return db, nil
+log.Println("✅ Successfully connected to the database!")
+return db, nil
 }
