@@ -36,6 +36,10 @@ func OpenConnection() (*gorm.DB, error) {
 		return nil, err
 	}
 
+	sqlDB.SetMaxOpenConns(25)
+	sqlDB.SetMaxIdleConns(10)
+	sqlDB.SetConnMaxLifetime(5 * time.Minute)
+
 log.Println("✅ Successfully connected to the database!")
 return db, nil
 }
