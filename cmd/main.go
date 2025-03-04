@@ -24,4 +24,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
+	r := gin.Default()
+
 }
