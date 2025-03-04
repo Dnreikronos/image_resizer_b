@@ -3,3 +3,9 @@ type Image struct {
 	Filename string `gorm:"not null"`
 	Data     []byte `gorm:"not null"`
 }
+func (i *Image) BeforeCreate(d *gorm.DB) (err error) {
+	i.ID = uuid.New()
+	return
+}
+
+
