@@ -4,7 +4,8 @@ import (
 	"fmt"
 
 	"github.com/Dnreikronos/image_resizer_b/configs"
-	connection "github.com/Dnreikronos/image_resizer_b/db"
+	"github.com/Dnreikronos/image_resizer_b/db/connection"
+	"github.com/Dnreikronos/image_resizer_b/db/migration"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 )
@@ -25,6 +26,8 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
+	migration.RunMigration(db)
 
 	r := gin.Default()
 
