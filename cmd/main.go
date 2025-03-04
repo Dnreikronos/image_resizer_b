@@ -5,6 +5,7 @@ import (
 
 	"github.com/Dnreikronos/image_resizer_b/configs"
 	connection "github.com/Dnreikronos/image_resizer_b/db"
+	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 )
 
@@ -27,4 +28,8 @@ func main() {
 
 	r := gin.Default()
 
+	r.Use(func(c *gin.Context) {
+		c.Set("db", db)
+		c.Next()
+	})
 }
