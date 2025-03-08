@@ -12,7 +12,7 @@ var allowedFormats = map[string]bool{
 	".png":  true,
 }
 
-func validateFile(fileHeader *multipart.FileHeader) error {
+func ValidateFile(fileHeader *multipart.FileHeader) error {
 	ext := filepath.Ext(fileHeader.Filename)
 	if !allowedFormats[ext] {
 		return errors.New("unsupported file format, only JPG and PNG are allowed")
