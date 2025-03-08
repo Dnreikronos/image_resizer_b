@@ -5,12 +5,10 @@ import (
 	"gorm.io/gorm"
 )
 
-
-func RunMigration(db *gorm.DB){
+func RunMigration(db *gorm.DB) {
 	createTables(db)
 }
 
-func createTables(db *gorm.DB){
+func createTables(db *gorm.DB) {
 	db.AutoMigrate(&models.Image{})
 }
-
