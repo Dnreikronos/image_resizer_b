@@ -40,3 +40,18 @@ func UploadImage(c *gin.Context) {
 	log.Println("Image uploaded:", fileHeader.Filename)
 	c.JSON(http.StatusOK, gin.H{"message": "Image uploaded sucessfully", "id": image.ID})
 }
+
+func GetImage(c *gin.Context) {
+	id := c.Param("id")
+
+	db, _ := connection.OpenConnection()
+	var image models.Image
+
+	if err := db.First(&image, id).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Image not found"})
+		return
+	}
+
+	c.Header("Context-Type", "image/jpeg")
+	c.Writer.Write(image.Data)
+}
