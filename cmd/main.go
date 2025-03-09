@@ -4,8 +4,10 @@ import (
 	"fmt"
 
 	"github.com/Dnreikronos/image_resizer_b/configs"
+
 	"github.com/Dnreikronos/image_resizer_b/db/connection"
 	"github.com/Dnreikronos/image_resizer_b/db/migration"
+  h "github.com/Dnreikronos/image_resizer_b/handlers"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 )
@@ -35,4 +37,7 @@ func main() {
 		c.Set("db", db)
 		c.Next()
 	})
+
+	r.POST("/upload", h.UploadImage)
+	r.GET("/image/:id", h.GetImage)
 }
