@@ -40,4 +40,5 @@ func main() {
 
 	r.POST("/upload", h.UploadImage)
 	r.GET("/image/:id", h.GetImage)
+	r.POST("/resize", h.ReziseImage)
 }
