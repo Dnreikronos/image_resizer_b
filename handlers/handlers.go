@@ -121,3 +121,22 @@ func ReziseImage(c *gin.Context) {
 	log.Println("Image resized:", resizedImage.Filename)
 	c.JSON(http.StatusOK, gin.H{"message": "Image resized", "id": resizedImage.ID})
 }
+
+
+func DownloadResizedImage(c *gin.Context) {
+	id := c.Param("id")
+
+	db, _ := connection.OpenConnection()
+	var image models.Image
+
+	if err := db.First(&image, id).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Image not found"})
+		return
+	}
+
+	c.Header("Content-Disposition", "attachment; filename="+image.Filename)
+	c.Header("Context-Type", "application/octet-stream")
+	c.Header("Content-Length", strconv.Itoa(len(image.Data)))
+
+	c.Data(http.StatusOK, "application/octet-stream", image.Data)
+}
