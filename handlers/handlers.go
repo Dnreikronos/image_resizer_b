@@ -136,7 +136,7 @@ func DownloadResizedImage(c *gin.Context) {
 
 	c.Header("Content-Disposition", "attachment; filename="+image.Filename)
 	c.Header("Context-Type", "application/octet-stream")
-	c.Header("Content-Length", string(len(image.Data)))
+	c.Header("Content-Length", strconv.Itoa(len(image.Data)))
 
 	c.Data(http.StatusOK, "application/octet-stream", image.Data)
 }
