@@ -48,7 +48,6 @@ func UploadImage(c *gin.Context) {
 
 	image := models.Image{Filename: fileHeader.Filename, Data: fileData}
 
-	// Save image in DB
 	if err := db.Create(&image).Error; err != nil {
 		log.Println("Failed to save image:", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save image"})
