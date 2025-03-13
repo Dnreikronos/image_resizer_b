@@ -61,7 +61,7 @@ services:
     depends_on:
       - postgres
 
-   postgres:
+  postgres:
     image: postgres:latest
     container_name: postgres
     ports:
@@ -73,3 +73,4 @@ services:
 
 volumes:
   postgresDB:
+
