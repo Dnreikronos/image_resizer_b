@@ -9,7 +9,6 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/Dnreikronos/image_resizer_b/db/connection"
 	"github.com/Dnreikronos/image_resizer_b/models"
 	"github.com/Dnreikronos/image_resizer_b/utils"
 	"github.com/disintegration/imaging"
@@ -17,7 +16,30 @@ import (
 	"gorm.io/gorm"
 )
 
+func getDBFromContext(c *gin.Context) (*gorm.DB, bool) {
+	db, exists := c.Get("db")
+	if !exists {
+		log.Println("Database connection is missing in context")
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Database connection is missing"})
+		return nil, false
+	}
+
+	gormDB, ok := db.(*gorm.DB)
+	if !ok {
+		log.Println("Invalid database instance in context")
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Invalid database instance"})
+		return nil, false
+	}
+
+	return gormDB, true
+}
+
 func UploadImage(c *gin.Context) {
+	db, ok := getDBFromContext(c)
+	if !ok {
+		return
+	}
+
 	file, fileHeader, err := c.Request.FormFile("image")
 	if err != nil {
 		log.Println("Error: File is required")
@@ -39,13 +61,6 @@ func UploadImage(c *gin.Context) {
 		return
 	}
 
-	db, err := connection.OpenConnection()
-	if err != nil {
-		log.Println("Database connection error:", err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Database connection error"})
-		return
-	}
-
 	image := models.Image{Filename: fileHeader.Filename, Data: fileData}
 
 	if err := db.Create(&image).Error; err != nil {
@@ -59,13 +74,12 @@ func UploadImage(c *gin.Context) {
 }
 
 func GetImage(c *gin.Context) {
-	id := c.Param("id")
-
-	db, err := connection.OpenConnection()
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Database connection error"})
+	db, ok := getDBFromContext(c)
+	if !ok {
 		return
 	}
+
+	id := c.Param("id")
 
 	var image models.Image
 	if err := db.First(&image, id).Error; err != nil {
@@ -79,6 +93,11 @@ func GetImage(c *gin.Context) {
 }
 
 func ResizeImage(c *gin.Context) {
+	db, ok := getDBFromContext(c)
+	if !ok {
+		return
+	}
+
 	id := c.Query("id")
 	widthParam := c.Query("width")
 	heightParam := c.Query("height")
@@ -91,12 +110,6 @@ func ResizeImage(c *gin.Context) {
 	height, err := strconv.Atoi(heightParam)
 	if err != nil || height <= 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid height"})
-		return
-	}
-
-	db, err := connection.OpenConnection()
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Database connection error"})
 		return
 	}
 
@@ -144,13 +157,12 @@ func ResizeImage(c *gin.Context) {
 }
 
 func DownloadResizedImage(c *gin.Context) {
-	id := c.Param("id")
-
-	db, err := connection.OpenConnection()
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Database connection error"})
+	db, ok := getDBFromContext(c)
+	if !ok {
 		return
 	}
+
+	id := c.Param("id")
 
 	var image models.Image
 	if err := db.First(&image, id).Error; err != nil {
