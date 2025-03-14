@@ -12,3 +12,17 @@ func setupTestDB() *gorm.DB {
 	}
 	return db
 }
+func SetupRouter(db *gorm.DB) *gin.Engine {
+	gin.SetMode(gin.TestMode)
+	r := gin.Default()
+	r.Use(func(c *gin.Context) {
+		c.Set("db", db)
+		c.Next()
+	})
+
+	r.POST("/upload", handlers.UploadImage)
+	r.GET("/image/:id", handlers.GetImage)
+	r.PUT("/resize", handlers.ResizeImage)
+	r.GET("/download/:id", handlers.DownloadResizedImage)
+	return r
+}
