@@ -13,6 +13,7 @@ import (
 	"github.com/Dnreikronos/image_resizer_b/utils"
 	"github.com/disintegration/imaging"
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
@@ -74,22 +75,28 @@ func UploadImage(c *gin.Context) {
 }
 
 func GetImage(c *gin.Context) {
-	db, ok := getDBFromContext(c)
-	if !ok {
-		return
-	}
+    db, ok := getDBFromContext(c)
+    if !ok {
+        return
+    }
 
-	id := c.Param("id")
 
-	var image models.Image
-	if err := db.First(&image, id).Error; err != nil {
-		log.Println("Image not found:", id)
-		c.JSON(http.StatusNotFound, gin.H{"error": "Image not found"})
-		return
-	}
+    idStr := c.Param("id")
+    id, err := uuid.Parse(idStr)
+    if err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid UUID format"})
+        return
+    }
 
-	c.Header("Content-Type", "image/jpeg")
-	c.Writer.Write(image.Data)
+    var image models.Image
+    if err := db.Where("id = ?", id).First(&image).Error; err != nil {
+        log.Println("Image not found:", id)
+        c.JSON(http.StatusNotFound, gin.H{"error": "Image not found"})
+        return
+    }
+
+    c.Header("Content-Type", "image/jpeg")
+    c.Writer.Write(image.Data)
 }
 
 func ResizeImage(c *gin.Context) {
