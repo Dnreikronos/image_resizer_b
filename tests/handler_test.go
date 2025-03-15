@@ -11,6 +11,7 @@ import (
 	"github.com/Dnreikronos/image_resizer_b/handlers"
 	"github.com/Dnreikronos/image_resizer_b/models"
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
@@ -67,4 +68,40 @@ func TestUploadImage(t *testing.T) {
 
 	assert.Equal(t, http.StatusOK, w.Code)
 	assert.Contains(t, w.Body.String(), "Image uploaded successfully")
+}
+
+func TestGetImage(t *testing.T) {
+	db := setupTestDB()
+	r := SetupRouter(db)
+
+	imageData := []byte("fake_image_data")
+	image := models.Image{
+		ID:       uuid.New(),
+		Filename: "test.jpg",
+		Data:     imageData,
+	}
+	db.Create(&image)
+
+	t.Run("Image Found", func(t *testing.T) {
+		req := httptest.NewRequest(http.MethodGet, "/image/"+image.ID.String(), nil)
+		w := httptest.NewRecorder()
+
+		r.ServeHTTP(w, req)
+
+		assert.Equal(t, http.StatusOK, w.Code)
+		assert.Equal(t, "image/jpeg", w.Header().Get("Content-Type"))
+		assert.Equal(t, imageData, w.Body.Bytes())
+	})
+
+	t.Run("Image Not Found", func(t *testing.T) {
+		randomID := uuid.New()
+
+		req := httptest.NewRequest(http.MethodGet, "/image/"+randomID.String(), nil)
+		w := httptest.NewRecorder()
+
+		r.ServeHTTP(w, req)
+
+		assert.Equal(t, http.StatusNotFound, w.Code)
+		assert.Contains(t, w.Body.String(), "Image not found")
+	})
 }
