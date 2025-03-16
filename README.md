@@ -110,15 +110,6 @@ Run the tests for the image resizer application:
 make test
 ```
 
-## Improvements
-
-Feel free to improve this project by:
-
-- Adding more image processing features (e.g., cropping, rotating).
-- Enhancing logging and error handling.
-- Optimizing the Docker setup for production use.
-- Implementing more robust database migration handling.
-
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
