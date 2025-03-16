@@ -4,7 +4,7 @@ services:
     container_name: elasticsearch
     environment:
       - discovery.type=single-node
-      - xpack.security.enable=false
+      - xpack.security.enabled=false
     ports:
       - "9200:9200"
     networks:
