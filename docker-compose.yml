@@ -7,6 +7,8 @@ services:
       - xpack.security.enable=false
     ports:
       - "9200:9200"
+    networks:
+      - elk-network
 
   logstash:
     image: docker.elastic.co/logstash/logstash:8.5.1
@@ -21,6 +23,8 @@ services:
       - "5044:5044"
       - "5000:5000"
       - "9600:9600"
+    networks:
+      - elk-network
 
   kibana:
     image: docker.elastic.co/kibana/kibana:8.5.1
@@ -31,6 +35,8 @@ services:
       - elasticsearch
     ports:
       - "5601:5601"
+    networks:
+      - elk-network
 
   resizer:
     container_name: resizer_application
@@ -49,6 +55,8 @@ services:
       POSTGRES_TIME_ZONE: ${POSTGRES_TIME_ZONE}
     depends_on:
       - postgres
+    networks:
+      - elk-network
 
   pgadmin:
     image: dpage/pgadmin4
@@ -60,6 +68,8 @@ services:
       - "8080:80"
     depends_on:
       - postgres
+    networks:
+      - elk-network
 
   postgres:
     image: postgres:latest
@@ -70,7 +80,13 @@ services:
       - postgresDB:/var/lib/postgresql/data
     env_file:
       - .env
+    networks:
+      - elk-network
 
 volumes:
   postgresDB:
+
+networks:
+  elk-network:
+    driver: bridge
 
