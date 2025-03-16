@@ -6,7 +6,7 @@ import (
 )
 
 type Image struct {
-	ID       uuid.UUID `gorm:"primaryKey"`
+	ID       uuid.UUID `gorm:"type:uuid;primaryKey"`
 	Filename string    `gorm:"not null"`
 	Data     []byte    `gorm:"not null"`
 }
